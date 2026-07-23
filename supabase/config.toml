@@ -416,3 +416,17 @@ enabled = true
 # declarative_schema_path = "./database"
 # JSON string passed through to pg-delta SQL formatting.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":80,\"commaStyle\":\"trailing\"}"
+
+[functions.award-xp]
+enabled = true
+# Defense in depth: the platform gateway rejects missing/invalid/expired
+# JWTs before this function's code even runs, in addition to the
+# function calling getUser() itself to derive the authoritative user id.
+verify_jwt = true
+import_map = "./functions/award-xp/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/award-xp/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/award-xp/*.html" ]
