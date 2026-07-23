@@ -16,6 +16,7 @@ const baseRow: UsersRow = {
   current_streak: 3,
   longest_streak: 7,
   last_active_date: null,
+  last_freeze_at: null,
   onboarded: true,
   timezone: 'America/Los_Angeles',
   push_token: null,
