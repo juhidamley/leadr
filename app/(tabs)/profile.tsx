@@ -1,4 +1,5 @@
 import * as ImagePicker from 'expo-image-picker'
+import { Link } from 'expo-router'
 import { useState } from 'react'
 import { ActivityIndicator, Pressable, ScrollView, Text, TextInput, View } from 'react-native'
 
@@ -170,6 +171,12 @@ export default function ProfileScreen(): React.JSX.Element {
           <Text className="text-sm text-gray-500 dark:text-gray-400">Longest streak</Text>
         </View>
       </View>
+
+      <Link asChild href="/friends">
+        <Pressable accessibilityLabel="Friends" accessibilityRole="button" className="w-full rounded-lg border border-gray-300 px-4 py-2 dark:border-gray-700">
+          <Text className="text-center font-semibold text-black dark:text-white">Friends</Text>
+        </Pressable>
+      </Link>
 
       <Pressable
         accessibilityLabel="Sign out"

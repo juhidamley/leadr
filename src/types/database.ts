@@ -585,15 +585,67 @@ export type Database = {
           xp_in_period: number
         }[]
       }
+      block_user: { Args: { target: string }; Returns: undefined }
+      cancel_friend_request: { Args: { target: string }; Returns: undefined }
       is_accepted_friend: { Args: { target: string }; Returns: boolean }
       is_group_member: { Args: { g: string }; Returns: boolean }
       is_handle_available: { Args: { candidate: string }; Returns: boolean }
       level_for_xp: { Args: { p_xp: number }; Returns: number }
+      list_friend_requests: {
+        Args: never
+        Returns: {
+          avatar_url: string
+          created_at: string
+          direction: Database["public"]["Enums"]["friend_request_direction"]
+          display_name: string
+          handle: string
+          user_id: string
+        }[]
+      }
+      list_friends: {
+        Args: never
+        Returns: {
+          avatar_url: string
+          current_level: number
+          current_streak: number
+          display_name: string
+          handle: string
+          id: string
+          total_xp: number
+        }[]
+      }
+      remove_friend: { Args: { other: string }; Returns: undefined }
+      respond_to_request: {
+        Args: { accept: boolean; requester: string }
+        Returns: undefined
+      }
+      search_users: {
+        Args: { lim?: number; q: string }
+        Returns: {
+          avatar_url: string
+          display_name: string
+          handle: string
+          id: string
+          relationship: Database["public"]["Enums"]["friend_relationship"]
+        }[]
+      }
+      send_friend_request: {
+        Args: { target: string }
+        Returns: Database["public"]["Enums"]["friendship_status"]
+      }
+      unblock_user: { Args: { target: string }; Returns: undefined }
       xp_for_level: { Args: { p_level: number }; Returns: number }
     }
     Enums: {
       activity_source: "manual" | "gmail" | "calendar" | "linkedin"
       activity_verified: "self" | "proof" | "auto"
+      friend_relationship:
+        | "none"
+        | "outgoing"
+        | "incoming"
+        | "friends"
+        | "blocked"
+      friend_request_direction: "incoming" | "outgoing"
       friendship_status: "pending" | "accepted" | "blocked"
       group_type: "friends" | "cohort" | "class"
       leaderboard_scope: "friends" | "group" | "league"
@@ -735,6 +787,14 @@ export const Constants = {
     Enums: {
       activity_source: ["manual", "gmail", "calendar", "linkedin"],
       activity_verified: ["self", "proof", "auto"],
+      friend_relationship: [
+        "none",
+        "outgoing",
+        "incoming",
+        "friends",
+        "blocked",
+      ],
+      friend_request_direction: ["incoming", "outgoing"],
       friendship_status: ["pending", "accepted", "blocked"],
       group_type: ["friends", "cohort", "class"],
       leaderboard_scope: ["friends", "group", "league"],

@@ -34,6 +34,7 @@ function RootNavigator(): React.JSX.Element {
       </Stack.Protected>
       <Stack.Protected guard={gate.status === 'ready'}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="friends" options={{ presentation: 'card' }} />
       </Stack.Protected>
     </Stack>
   )
