@@ -480,6 +480,7 @@ export type Database = {
           handle: string
           id: string
           last_active_date: string | null
+          last_freeze_at: string | null
           longest_streak: number
           onboarded: boolean
           phone: string | null
@@ -498,6 +499,7 @@ export type Database = {
           handle: string
           id: string
           last_active_date?: string | null
+          last_freeze_at?: string | null
           longest_streak?: number
           onboarded?: boolean
           phone?: string | null
@@ -516,6 +518,7 @@ export type Database = {
           handle?: string
           id?: string
           last_active_date?: string | null
+          last_freeze_at?: string | null
           longest_streak?: number
           onboarded?: boolean
           phone?: string | null
@@ -560,9 +563,33 @@ export type Database = {
       }
     }
     Functions: {
+      award_xp: {
+        Args: {
+          p_activity_type_key: string
+          p_client_id: string
+          p_note?: string
+          p_occurred_at?: string
+          p_proof_url?: string
+          p_source?: Database["public"]["Enums"]["activity_source"]
+          p_user_id: string
+        }
+        Returns: {
+          activity_id: string
+          capped: boolean
+          current_level: number
+          current_streak: number
+          longest_streak: number
+          streak_freeze_used: boolean
+          total_xp: number
+          xp_awarded: number
+          xp_in_period: number
+        }[]
+      }
       is_accepted_friend: { Args: { target: string }; Returns: boolean }
       is_group_member: { Args: { g: string }; Returns: boolean }
       is_handle_available: { Args: { candidate: string }; Returns: boolean }
+      level_for_xp: { Args: { p_xp: number }; Returns: number }
+      xp_for_level: { Args: { p_level: number }; Returns: number }
     }
     Enums: {
       activity_source: "manual" | "gmail" | "calendar" | "linkedin"
