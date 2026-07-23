@@ -64,6 +64,14 @@ export default ({ config }: ConfigContext): ExpoConfig =>
         },
       ],
       [
+        'expo-image-picker',
+        {
+          photosPermission: 'Allow Leadr to access your photos to set a profile picture.',
+          cameraPermission: false,
+          microphonePermission: false,
+        },
+      ],
+      [
         'expo-splash-screen',
         {
           backgroundColor: '#208AEF',
