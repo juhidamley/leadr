@@ -1,29 +1,29 @@
-import * as Crypto from 'expo-crypto'
-
 import { supabase } from '@/lib/supabase'
 
 import type { AwardXpResponse } from './types'
 
 export type LogActivityInput = {
+  clientId: string
   activityTypeKey: string
+  occurredAt: string
   note?: string
 }
 
 /**
- * The single entry point that mints a client_id and calls award-xp.
- * Deliberately minimal and framework-light — no query cache, no React —
- * so Task 11 can slot an offline queue in front of it (queue offline,
- * flush by calling this exact function per queued item, same idempotent
- * client_id contract) without a rewrite. Optimistic UI and reconciliation
- * live in useLogActivity, one layer up.
+ * The single entry point that calls award-xp. Deliberately minimal and
+ * framework-light — no query cache, no React. `clientId` and
+ * `occurredAt` are supplied by the caller (minted once, at tap time) so
+ * that a retried/resumed call (Task 11's offline queue) reuses the exact
+ * same idempotency key and local-day timestamp instead of re-deriving
+ * them on every attempt. Optimistic UI and reconciliation live one layer
+ * up, in the `logActivity` mutation (see logActivityMutationDefaults.ts).
  */
 export async function logActivity(input: LogActivityInput): Promise<AwardXpResponse> {
-  const clientId = Crypto.randomUUID()
-
   const { data, error } = await supabase.functions.invoke<AwardXpResponse>('award-xp', {
     body: {
-      client_id: clientId,
+      client_id: input.clientId,
       activity_type_key: input.activityTypeKey,
+      occurred_at: input.occurredAt,
       note: input.note,
     },
   })
