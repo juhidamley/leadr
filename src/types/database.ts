@@ -614,6 +614,7 @@ export type Database = {
           total_xp: number
         }[]
       }
+      redeem_invite: { Args: { inviter_handle: string }; Returns: undefined }
       remove_friend: { Args: { other: string }; Returns: undefined }
       respond_to_request: {
         Args: { accept: boolean; requester: string }

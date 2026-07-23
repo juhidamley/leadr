@@ -9,6 +9,15 @@ import type { ConfigContext, ExpoConfig } from 'expo/config'
 // prebuild/typecheck/CI working before that's configured.
 const googleIosUrlScheme = process.env.GOOGLE_IOS_URL_SCHEME || 'com.googleusercontent.apps.placeholder'
 
+// Branch (Task 14, invite deep links). Real values come from the Branch
+// dashboard (see the Task 14 manual setup checklist) — a live API key and
+// the link domain Branch provisions for this app (e.g. leadr.app.link).
+// These placeholders keep prebuild/typecheck/CI working before that's
+// configured; react-native-branch's config plugin throws at prebuild time
+// on a missing/empty key, so the fallback must be non-empty.
+const branchApiKey = process.env.EXPO_PUBLIC_BRANCH_KEY || 'key_test_placeholder'
+const branchLinkDomain = process.env.EXPO_PUBLIC_BRANCH_LINK_DOMAIN || 'leadr.app.link'
+
 // GoogleSignIn-iOS pulls in Firebase's AppCheckCore transitively, which is a
 // Swift pod that can't link as a static library without modular headers.
 // `pod install` fails with "cannot yet be integrated as static libraries"
@@ -38,6 +47,11 @@ export default ({ config }: ConfigContext): ExpoConfig =>
     ios: {
       icon: './assets/expo.icon',
       bundleIdentifier: 'com.leadr.app',
+      // Universal Links: iOS only opens the app (instead of Safari) for a
+      // Branch link if the domain is declared here AND verified via
+      // Branch's hosted apple-app-site-association file — see the setup
+      // checklist.
+      associatedDomains: [`applinks:${branchLinkDomain}`],
     },
     android: {
       package: 'com.leadr.app',
@@ -48,6 +62,16 @@ export default ({ config }: ConfigContext): ExpoConfig =>
         monochromeImage: './assets/images/android-icon-monochrome.png',
       },
       predictiveBackGestureEnabled: false,
+      // Android App Links: the equivalent of associatedDomains above,
+      // verified against Branch's hosted assetlinks.json.
+      intentFilters: [
+        {
+          action: 'VIEW',
+          autoVerify: true,
+          data: [{ scheme: 'https', host: branchLinkDomain }],
+          category: ['BROWSABLE', 'DEFAULT'],
+        },
+      ],
     },
     web: {
       output: 'static',
@@ -77,6 +101,13 @@ export default ({ config }: ConfigContext): ExpoConfig =>
           backgroundColor: '#208AEF',
           image: './assets/images/splash-icon.png',
           imageWidth: 76,
+        },
+      ],
+      [
+        '@config-plugins/react-native-branch',
+        {
+          apiKey: branchApiKey,
+          iosUniversalLinkDomains: [branchLinkDomain],
         },
       ],
     ],

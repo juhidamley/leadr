@@ -7,6 +7,7 @@ import { Avatar } from '@/components/Avatar'
 import { ProgressBar } from '@/components/ProgressBar'
 import { useAuth } from '@/features/auth/AuthProvider'
 import { signOut } from '@/features/auth/api'
+import { useShareInvite } from '@/features/invites/useShareInvite'
 import { useUpdateDisplayName, useUploadAvatar } from '@/features/profile/mutations'
 import { useProfile } from '@/features/profile/useProfile'
 import { levelProgress } from '@/features/xp/levels'
@@ -42,6 +43,7 @@ export default function ProfileScreen(): React.JSX.Element {
   const { data: profile, isLoading, isError, refetch } = useProfile(user?.id)
   const updateDisplayName = useUpdateDisplayName(user?.id)
   const uploadAvatar = useUploadAvatar(user?.id)
+  const shareInvite = useShareInvite(profile?.handle)
 
   const [editingName, setEditingName] = useState(false)
   const [nameInput, setNameInput] = useState('')
@@ -177,6 +179,23 @@ export default function ProfileScreen(): React.JSX.Element {
           <Text className="text-center font-semibold text-black dark:text-white">Friends</Text>
         </Pressable>
       </Link>
+
+      <Pressable
+        accessibilityLabel="Invite friends"
+        accessibilityRole="button"
+        className="w-full rounded-lg border border-blue-600 px-4 py-2 disabled:opacity-50"
+        disabled={shareInvite.isPending}
+        onPress={() => void shareInvite.share()}
+      >
+        <Text className="text-center font-semibold text-blue-600 dark:text-blue-400">
+          {shareInvite.isPending ? 'Preparing link…' : 'Invite friends'}
+        </Text>
+      </Pressable>
+      {shareInvite.error ? (
+        <Text accessibilityRole="alert" className="text-sm text-red-600 dark:text-red-400">
+          {shareInvite.error}
+        </Text>
+      ) : null}
 
       <Pressable
         accessibilityLabel="Sign out"
