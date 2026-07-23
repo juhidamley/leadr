@@ -481,6 +481,7 @@ export type Database = {
           id: string
           last_active_date: string | null
           longest_streak: number
+          onboarded: boolean
           phone: string | null
           push_token: string | null
           target_role: string | null
@@ -498,6 +499,7 @@ export type Database = {
           id: string
           last_active_date?: string | null
           longest_streak?: number
+          onboarded?: boolean
           phone?: string | null
           push_token?: string | null
           target_role?: string | null
@@ -515,6 +517,7 @@ export type Database = {
           id?: string
           last_active_date?: string | null
           longest_streak?: number
+          onboarded?: boolean
           phone?: string | null
           push_token?: string | null
           target_role?: string | null
@@ -559,6 +562,7 @@ export type Database = {
     Functions: {
       is_accepted_friend: { Args: { target: string }; Returns: boolean }
       is_group_member: { Args: { g: string }; Returns: boolean }
+      is_handle_available: { Args: { candidate: string }; Returns: boolean }
     }
     Enums: {
       activity_source: "manual" | "gmail" | "calendar" | "linkedin"
