@@ -8,6 +8,7 @@ export type ProfileViewModel = {
   currentLevel: number
   currentStreak: number
   longestStreak: number
+  timezone: string
 }
 
 type UsersRow = Database['public']['Tables']['users']['Row']
@@ -21,5 +22,6 @@ export function mapProfile(row: UsersRow, avatarUrl: string | null): ProfileView
     currentLevel: row.current_level,
     currentStreak: row.current_streak,
     longestStreak: row.longest_streak,
+    timezone: row.timezone,
   }
 }

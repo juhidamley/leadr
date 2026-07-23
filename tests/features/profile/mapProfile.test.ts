@@ -33,6 +33,7 @@ describe('mapProfile', () => {
       currentLevel: 2,
       currentStreak: 3,
       longestStreak: 7,
+      timezone: 'America/Los_Angeles',
     })
   })
 
